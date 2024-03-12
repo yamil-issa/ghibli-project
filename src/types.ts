@@ -8,7 +8,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -16,19 +15,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-};
-
-export type Address = {
-  __typename?: 'Address';
-  zipCode?: Maybe<Scalars['String']['output']>;
-};
-
-export type Doctor = {
-  __typename?: 'Doctor';
-  addresses?: Maybe<Array<Maybe<Address>>>;
-  id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
-  speciality?: Maybe<Speciality>;
 };
 
 export type Film = {
@@ -48,46 +34,9 @@ export type People = {
 
 export type Query = {
   __typename?: 'Query';
-  closestColor: Scalars['String']['output'];
-  divide: Scalars['Float']['output'];
-  doctor?: Maybe<Doctor>;
-  doctors?: Maybe<Array<Maybe<Doctor>>>;
   getFilms: Array<Film>;
   getPeople: Array<People>;
-  multiply: Scalars['Float']['output'];
 };
-
-
-export type QueryClosestColorArgs = {
-  color: Scalars['String']['input'];
-};
-
-
-export type QueryDivideArgs = {
-  number1: Scalars['Int']['input'];
-  number2: Scalars['Int']['input'];
-};
-
-
-export type QueryDoctorArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryDoctorsArgs = {
-  specialities?: InputMaybe<Array<Speciality>>;
-};
-
-
-export type QueryMultiplyArgs = {
-  number1: Scalars['Int']['input'];
-  number2: Scalars['Int']['input'];
-};
-
-export enum Speciality {
-  Ophtalmologist = 'OPHTALMOLOGIST',
-  Psychologist = 'PSYCHOLOGIST'
-}
 
 
 
@@ -160,44 +109,22 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Address: ResolverTypeWrapper<Address>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  Doctor: ResolverTypeWrapper<Doctor>;
   Film: ResolverTypeWrapper<FilmModel>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
-  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   People: ResolverTypeWrapper<PeopleModel>;
   Query: ResolverTypeWrapper<{}>;
-  Speciality: Speciality;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Address: Address;
   Boolean: Scalars['Boolean']['output'];
-  Doctor: Doctor;
   Film: FilmModel;
-  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
-  Int: Scalars['Int']['output'];
   People: PeopleModel;
   Query: {};
   String: Scalars['String']['output'];
-};
-
-export type AddressResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = {
-  zipCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type DoctorResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Doctor'] = ResolversParentTypes['Doctor']> = {
-  addresses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Address']>>>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  speciality?: Resolver<Maybe<ResolversTypes['Speciality']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type FilmResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Film'] = ResolversParentTypes['Film']> = {
@@ -216,18 +143,11 @@ export type PeopleResolvers<ContextType = DataSourceContext, ParentType extends 
 };
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  closestColor?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryClosestColorArgs, 'color'>>;
-  divide?: Resolver<ResolversTypes['Float'], ParentType, ContextType, RequireFields<QueryDivideArgs, 'number1' | 'number2'>>;
-  doctor?: Resolver<Maybe<ResolversTypes['Doctor']>, ParentType, ContextType, RequireFields<QueryDoctorArgs, 'id'>>;
-  doctors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Doctor']>>>, ParentType, ContextType, Partial<QueryDoctorsArgs>>;
   getFilms?: Resolver<Array<ResolversTypes['Film']>, ParentType, ContextType>;
   getPeople?: Resolver<Array<ResolversTypes['People']>, ParentType, ContextType>;
-  multiply?: Resolver<ResolversTypes['Float'], ParentType, ContextType, RequireFields<QueryMultiplyArgs, 'number1' | 'number2'>>;
 };
 
 export type Resolvers<ContextType = DataSourceContext> = {
-  Address?: AddressResolvers<ContextType>;
-  Doctor?: DoctorResolvers<ContextType>;
   Film?: FilmResolvers<ContextType>;
   People?: PeopleResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
